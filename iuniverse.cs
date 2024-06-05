@@ -9,7 +9,7 @@ public interface IUniverse
     public void AddParticle(IParticle particle);
     public void AddPhoton(ulong frequency, Vector3 pos, Vector3 dir);
     public void AddPhoton(ulong frequency, IParticle source, Vector3 dir);
-    public void AddAtom(Vector3 pos, uint numProtons);
+    public void AddAtom(Vector3 pos, Vector3 dir, uint numProtons = 1, uint numNeutrons = 0, uint numElectrons = 1);
 
     // Run the universe for a duration
     public Task Run(ulong duration = ulong.MaxValue);

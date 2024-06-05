@@ -39,7 +39,7 @@ public class Universe: IUniverse
     public void AddPhoton(ulong frequency, Vector3 pos, Vector3 dir)
     {
         // Hack, no source particle, create a null poarticle at the start location
-        var source = new Particle(frequency * CONSTANTS.PLANCK_CONSTANT, pos, 0, Vector3.Zero);
+        var source = new Particle(frequency * CONSTANTS.PLANCK_CONSTANT, pos, Vector3.Zero);
 
         var photon = new Photon(frequency, source, dir);
         particles.Add(photon);
@@ -59,7 +59,7 @@ public class Universe: IUniverse
             {
                 foreach (var particle in particles)
                 {
-                    particle.position += particle.momentum;
+                    particle.Tick();
                 }
             }
         });
@@ -70,8 +70,9 @@ public class Universe: IUniverse
         return particles.Sum(p => p.energy);
     }
 
-    public void AddAtom(Vector3 pos, uint numProtons)
+    public void AddAtom(Vector3 pos, Vector3 dir, uint numProtons = 1, uint numNeutrons = 0, uint numElectrons = 1)
     {
-        throw new NotImplementedException();
+        var matter = new Matter(pos, dir, numProtons, numNeutrons, numElectrons);
+        particles.Add(matter);
     }
 }

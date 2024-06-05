@@ -42,4 +42,13 @@ public class Basic_Tests
         universe.Run(100).RunSynchronously();
     }
 
+    [Fact]
+    public void TestAddHydrogen()
+    {
+        var universe = new cheat.Universe();
+        universe.Create(100, 100, 100);
+        
+        universe.AddAtom(new Vector3(50,50,50), new Vector3(0,1,0), 1, 0);
+        universe.Run(100).RunSynchronously();
+    }
 }
