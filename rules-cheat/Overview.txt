@@ -1,0 +1,1 @@
+A cheat model that tries to pass all physics tests in the universe by knowing what it is testing and providing that answer.

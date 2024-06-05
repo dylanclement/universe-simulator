@@ -1,13 +1,16 @@
+using System.Numerics;
+
+namespace universe_simulator.cheat;
 public class Universe: IUniverse
 {
-    public double Width { get; set; }
-    public double Height { get; set; }
-    public double Depth { get; set; }
-    private List<IParticle> particles = new List<IParticle>();
+    public double width { get; set; }
+    public double height { get; set; }
+    public double depth { get; set; }
+    private List<IParticle> particles;
 
-    public void AddParticle(Particle particle)
+    public Universe()
     {
-        particles.Add(particle);
+        particles = new List<IParticle>();
     }
 
     public double GetTotalEnergy()
@@ -15,8 +18,60 @@ public class Universe: IUniverse
         double totalEnergy = 0;
         foreach (var particle in particles)
         {
-            totalEnergy += particle.;
+            totalEnergy += particle.energy;
         }
         return totalEnergy;
+    }
+
+    public bool Create(ulong width, ulong height, ulong depth)
+    {
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
+        return true;
+    }
+
+    public void AddParticle(IParticle particle)
+    {
+        particles.Add(particle);
+    }
+
+    public void AddPhoton(ulong frequency, Vector3 pos, Vector3 dir)
+    {
+        // Hack, no source particle, create a null poarticle at the start location
+        var source = new Particle(frequency * CONSTANTS.PLANCK_CONSTANT, pos, 0, Vector3.Zero);
+
+        var photon = new Photon(frequency, source, dir);
+        particles.Add(photon);
+    }
+
+    public void AddPhoton(ulong frequency, IParticle source, Vector3 dir)
+    {
+        var photon = new Photon(frequency, source, dir);
+        particles.Add(photon);
+    }
+
+    public Task Run(ulong duration = ulong.MaxValue)
+    {
+        return new Task(() => 
+        {
+            for (ulong i = 0; i < duration; i++)
+            {
+                foreach (var particle in particles)
+                {
+                    particle.position += particle.momentum;
+                }
+            }
+        });
+    }
+
+    double IUniverse.GetTotalEnergy()
+    {
+        return particles.Sum(p => p.energy);
+    }
+
+    public void AddAtom(Vector3 pos, uint numProtons)
+    {
+        throw new NotImplementedException();
     }
 }
